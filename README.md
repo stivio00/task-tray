@@ -48,6 +48,19 @@ python main.py <test-folder>
 When test folder is specified then it will load the config.yaml from there and write the logs in this folder.
 
 
+## Screenshots
+ Default menu:
+
+<img src="docs/screenshot_mac.png" alt="drawing" width="300"/>
+
+with emoticons:
+
+<img src="docs/screenshot_2_mac.png" alt="drawing" width="500"/>
+
+
+## Resources
+The launcher icon is provided by https://www.flaticon.com/authors/maxicons from the battlefield-2 collection in  the FlatIcons website.
+
 ## Config example
 ```yaml
 links:
@@ -110,15 +123,63 @@ links:
 
 ```
 
-## Screenshots
- Default menu:
+Example with emoticons and enviremnt variables:
 
-<img src="docs/screenshot_mac.png" alt="drawing" width="300"/>
+```yaml
+links:
+  - name: 💬 GPT
+    cmd: https://chatgpt.com
+    type: browser
 
-with emoticons:
+  - name: ⚙️ Open macOS Settings
+    cmd: "/System/Applications/System Settings.app"
+    type: open
 
-<img src="docs/screenshot_2_mac.png" alt="drawing" width="500"/>
+  - type: separator
 
+  - name: 🍻 Brew (update && upgrade && cleanup)
+    cmd: brew update && brew upgrade && brew cleanup
+    type: terminal
 
-## Resources
-The launcher icon is provided by https://www.flaticon.com/authors/maxicons from the battlefield-2 collection in  the FlatIcons website.
+  - type: separator
+
+  - name: 📡 SSH
+    group:
+    # identity_file: ~/.ssh/id_rsa_stephen
+    - name: 💻 T480
+      cmd: ssh stephen@stephen-t480
+      type: terminal
+    # identity_file: ~/.ssh/id_rsa_pi
+    - name: 🖥️ Raspberry Pi 8Gb
+      cmd: ssh stephen@rpi
+      type: terminal
+  
+  - name: 🐳 Docker Remote Hosts
+    group:
+    - name: 💻 T480
+      cmd: docker ps
+      env:
+        DOCKER_HOST: ssh://stephen@stephen-t480
+      type: terminal
+    - name: 🖥️ Raspberry Pi 8Gb
+      cmd: ssh stephen@rpi
+      env:
+        DOCKER_CONTEXT: rpi
+      type: terminal
+
+  - type: separator
+  
+  - name: 🛠️ Dev
+    group:
+    - name: TODO
+      cmd: code
+      type: terminal
+    - name: 📁 File Explorer - Projects
+      cmd: ~/Projects
+      type: open
+
+    
+  - name: ✏️ Edit config.yaml
+    cmd: ~/.task-tray/config.yaml
+    type: open
+```
