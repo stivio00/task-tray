@@ -30,9 +30,15 @@ A **cross-platform Python tray application** to quickly launch links, commands, 
 3. Run the installer:
 
 ```bash
+# download deps
+uv sync
+
+# activate env
+. .venv/bin/activate
+
+# install 
 python install.py --install
 ```
-
 
 ## Manual Run
 
