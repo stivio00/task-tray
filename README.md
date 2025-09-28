@@ -1,4 +1,4 @@
-# QuickLinks Tray App
+# TaskTray App
 
 A **cross-platform Python tray application** to quickly launch links, commands, and applications from a system tray menu. Supports Windows, macOS, and Linux.
 
