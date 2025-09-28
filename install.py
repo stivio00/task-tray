@@ -80,12 +80,14 @@ def install_macos():
     <string>com.{APP_NAME}</string>
     <key>ProgramArguments</key>
     <array>
-      <string>{PYTHON}</string>
+      <string>{PYTHON}w</string>
       <string>{MAIN_PY_TARGET}</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
     <key>KeepAlive</key>
+    <true/>
+    <key>LSBackgroundOnly</key>
     <true/>
   </dict>
 </plist>
