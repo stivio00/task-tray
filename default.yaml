@@ -1,0 +1,29 @@
+links:
+  - name: Open Google
+    cmd: https://www.google.com
+    type: browser
+
+  - name: Open GitHub
+    cmd: https://github.com
+    type: browser
+
+  - name: Open macOS Settings
+    cmd: "/System/Applications/System Settings.app"
+    type: open
+
+  - type: separator
+
+  - name: AWS SSO Login
+    cmd: aws sso login
+    type: terminal
+
+  - type: separator
+
+  - name: Nested Group Example
+    group:
+    - name: Ping Google
+      cmd: ping -c 4 google.com
+      type: terminal
+    - name: Open Docs
+      cmd: ~/Desktop/hello.txt
+      type: open

@@ -1,0 +1,57 @@
+links:
+  - name: Open Google
+    cmd: https://www.google.com
+    type: browser
+
+  - name: Open GitHub
+    cmd: https://github.com
+    type: browser
+
+  - name: Open macOS Settings
+    cmd: "/System/Applications/System Settings.app"
+    type: open
+
+  - type: separator
+
+  - name: AWS SSO Login
+    cmd: aws sso login
+    type: terminal
+
+  - name: Connect to Postgres via SSM
+    cmd: aws ssm start-session --target i-0123456789abcdef0 --document-name AWS-StartPortForwardingSession --parameters '{"portNumber":["5432"],"localPortNumber":["5432"]}'
+    type: terminal
+
+  - type: separator
+
+  - name: Kubernetes Port Forward Pod1
+    cmd: kubectl port-forward svc/service1 9000:9000
+    type: terminal
+
+  - name: Kubernetes Port Forward Pod2
+    cmd: kubectl port-forward svc/service2 8080:8080
+    type: terminal
+
+  - type: separator
+
+  - name: Ping Google
+    cmd: ping -c 4 google.com
+    type: terminal
+
+  - name: List Network Interfaces
+    cmd: ifconfig
+    type: terminal
+
+  - type: separator
+
+  - name: Run background command
+    cmd: echo "Hello World" > ~/Desktop/hello.txt
+    type: silent
+
+  - name: Nested Group Example
+    group:
+      - name: Ping Google
+        cmd: ping -c 4 google.com
+        type: terminal
+      - name: Open Docs
+        cmd: ~/Desktop/hello.txt
+        type: open
