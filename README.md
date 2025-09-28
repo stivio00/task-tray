@@ -111,8 +111,14 @@ links:
 ```
 
 ## Screenshots
+ Default menu:
 
 <img src="docs/screenshot_mac.png" alt="drawing" width="300"/>
+
+with emoticons:
+
+<img src="docs/screenshot_2_mac.png" alt="drawing" width="500"/>
+
 
 ## Resources
 The launcher icon is provided by https://www.flaticon.com/authors/maxicons from the battlefield-2 collection in  the FlatIcons website.
