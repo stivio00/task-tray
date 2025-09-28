@@ -6,7 +6,7 @@ import platform
 import shutil
 import subprocess
 
-APP_NAME = "QuickLinksTray"
+APP_NAME = "TaskTray"
 
 # Source files (assume install.py is in the same folder as main.py, icon.png, default.yaml, .env)
 SRC_DIR = pathlib.Path(__file__).parent
@@ -16,7 +16,7 @@ ENV_SRC = SRC_DIR / ".env"
 DEFAULT_YAML = SRC_DIR / "default.yaml"
 
 # Target directories
-CONFIG_DIR = pathlib.Path.home() / ".quick-links"
+CONFIG_DIR = pathlib.Path.home() / ".task-tray"
 BIN_DIR = CONFIG_DIR / "bin"
 MAIN_PY_TARGET = BIN_DIR / "main.py"
 ICON_TARGET = BIN_DIR / "icon.png"
@@ -107,7 +107,7 @@ Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
 Name={APP_NAME}
-Comment=Start QuickLinks Tray App
+Comment=Start TaskTray Tray App
 """
     with open(desktop_file, "w") as f:
         f.write(desktop_content)

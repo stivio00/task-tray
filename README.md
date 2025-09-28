@@ -18,7 +18,7 @@ A **cross-platform Python tray application** to quickly launch links, commands, 
   - Windows: adds registry entry.  
   - macOS: LaunchAgent.  
   - Linux: `.desktop` autostart.  
-- Automatically loads configuration and environment variables from `~/.quick-links`.  
+- Automatically loads configuration and environment variables from `~/.task-tray`.  
 - Optional **icon.png** for tray icon.  
 
 ---
@@ -108,4 +108,5 @@ links:
 
 <img src="docs/screenshot_mac.png" alt="drawing" width="300"/>
 
-helm
+## Resources
+The launcher icon is provided by https://www.flaticon.com/authors/maxicons from the battlefield-2 collection in  the FlatIcons website.

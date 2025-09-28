@@ -15,7 +15,7 @@ ICON_FILE = pathlib.Path(__file__).parent / "icon.png"
 if len(sys.argv) > 1:
     CONFIG_DIR = pathlib.Path(sys.argv[1]).expanduser().resolve()
 else:
-    CONFIG_DIR = pathlib.Path.home() / ".quick-links"
+    CONFIG_DIR = pathlib.Path.home() / ".task-tray"
 
 CONFIG_FILE = CONFIG_DIR / "config.yaml"
 LOG_FILE = CONFIG_DIR / "out.log"
@@ -138,9 +138,9 @@ def main():
     config = load_config()
     links = config.get("links", [])
 
-    icon = pystray.Icon("QuickLinksTray")
+    icon = pystray.Icon("TaskTray")
     icon.icon = create_icon()
-    icon.title = "Quick Links"
+    icon.title = "Task Tray App"
     icon.menu = Menu(*build_menu(links))
 
     icon.run()
