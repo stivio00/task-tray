@@ -27,7 +27,7 @@ A **cross-platform Python tray application** to quickly launch links, commands, 
 ## Installation
 
 1. Clone the repository or copy the files to a folder.  
-2. Make sure you have Python 3.10+ installed.  
+2. Make sure you have uv and Python 3.13+ installed.  
 3. Run the installer:
 
 ```bash
@@ -35,18 +35,18 @@ A **cross-platform Python tray application** to quickly launch links, commands, 
 uv sync
 
 # activate env
-. .venv/bin/activate
+. .venv/bin/activate # or in win  .venv\Scripts\activate.ps
 
 # install 
 python install.py --install
 ```
 
 ## Manual Run
-
+If you dont want to intall the script to run at start up you can run it manually:
 ```bash
-python main.py <test-folder>
+python main.py test
 ```
-When test folder is specified then it will load the config.yaml from there and write the logs in this folder.
+Where test folder is specified then it will load the config.yaml from there and write the logs in this folder.
 
 
 ## Screenshots
