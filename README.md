@@ -7,13 +7,14 @@ A **cross-platform Python tray application** to quickly launch links, commands, 
 ## Features
 
 - **Tray icon menu** with customizable links and commands.  
-- Supports different command types:
+- Supports different command types ("type:"):
   - `browser` → opens a URL in the default browser.
   - `terminal` → opens a command in a terminal window.
   - `open` → opens files or applications with the default OS handler.
   - `silent` → executes background commands without opening a window (default).
   - `separator` → adds a menu separator.  
-- **Nested menus** and grouping support.  
+- **Nested menus** and grouping support ("group:").  
+- **Custom Environment variables** per task ("env:").
 - **Cross-platform startup**:
   - Windows: adds registry entry.  
   - macOS: LaunchAgent.  

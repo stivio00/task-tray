@@ -1,0 +1,59 @@
+# Default configuration for Windows
+# Copy this file to config.yaml and edit it to customize your setup 
+# Please edit this file according to your OS and preferences
+
+links:
+  - name: 💬 GPT
+    cmd: https://chatgpt.com
+    type: browser
+
+  - name: ⚙️ Windows Settings
+    cmd: ms-settings:
+    type: open
+
+  - type: separator
+
+  - name: 📦 Winget Upgrade
+    cmd: winget upgrade --all
+    type: terminal
+
+  - type: separator
+
+  - name: 📡 SSH
+    group:
+      - name: 💻 T480
+        cmd: ssh stephen@stephen-t480
+        type: terminal
+      - name: 🖥️ Raspberry Pi
+        cmd: ssh stephen@rpi
+        type: terminal
+
+  - name: 🐳 Docker Remote Hosts
+    group:
+      - name: 💻 T480
+        cmd: docker ps
+        env:
+          DOCKER_HOST: ssh://stephen@stephen-t480
+        type: terminal
+      - name: 🖥️ Raspberry Pi
+        cmd: docker ps
+        env:
+          DOCKER_CONTEXT: rpi
+        type: terminal
+
+  - type: separator
+
+  - name: 🛠️ Dev
+    group:
+      - name: 📝 TODO (VS Code)
+        cmd: code
+        type: terminal
+      - name: 📁 File Explorer - Projects
+        cmd: C:\\Users\\%USERNAME%\\Projects
+        type: open
+
+  - type: separator
+
+  - name: ✏️ Edit config.yaml
+    cmd: C:\\Users\\%USERNAME%\\.task-tray\\config.yaml
+    type: open

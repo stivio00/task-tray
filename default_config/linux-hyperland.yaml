@@ -1,0 +1,55 @@
+links:
+  - name: 💬 GPT
+    cmd: https://chatgpt.com
+    type: browser
+
+  - name: ⚙️ Open Settings (wofi launcher)
+    cmd: wofi --show drun
+    type: terminal
+
+  - type: separator
+
+  - name: 📦 System Update (pacman)
+    cmd: sudo pacman -Syu
+    type: terminal
+
+  - type: separator
+
+  - name: 📡 SSH
+    group:
+      - name: 💻 T480
+        cmd: ssh stephen@stephen-t480
+        type: terminal
+      - name: 🖥️ Raspberry Pi
+        cmd: ssh stephen@rpi
+        type: terminal
+
+  - name: 🐳 Docker Remote Hosts
+    group:
+      - name: 💻 T480
+        cmd: docker ps
+        env:
+          DOCKER_HOST: ssh://stephen@stephen-t480
+        type: terminal
+      - name: 🖥️ Raspberry Pi
+        cmd: docker ps
+        env:
+          DOCKER_CONTEXT: rpi
+        type: terminal
+
+  - type: separator
+
+  - name: 🛠️ Dev
+    group:
+      - name: 📝 TODO (VS Code)
+        cmd: code
+        type: terminal
+      - name: 📁 Open Projects (xdg-open)
+        cmd: ~/Projects
+        type: open
+
+  - type: separator
+
+  - name: ✏️ Edit config.yaml
+    cmd: ~/.task-tray/config.yaml
+    type: open
