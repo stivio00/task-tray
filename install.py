@@ -8,12 +8,13 @@ import subprocess
 
 APP_NAME = "TaskTray"
 
-# Source files (assume install.py is in the same folder as main.py, icon.png, default.yaml, .env)
+# Source files (assume install.py is in the same folder as main.py, icon.png, default.yaml, .env, .venv)
 SRC_DIR = pathlib.Path(__file__).parent
 MAIN_PY_SRC = SRC_DIR / "main.py"
 ICON_SRC = SRC_DIR / "icon.png"
 ENV_SRC = SRC_DIR / ".env"
 DEFAULT_YAML = SRC_DIR / "default.yaml"
+VENV_SRC = SRC_DIR / ".venv"   # source virtual environment
 
 # Target directories
 CONFIG_DIR = pathlib.Path.home() / ".task-tray"
@@ -22,8 +23,10 @@ MAIN_PY_TARGET = BIN_DIR / "main.py"
 ICON_TARGET = BIN_DIR / "icon.png"
 ENV_TARGET = BIN_DIR / ".env"
 CONFIG_YAML = CONFIG_DIR / "config.yaml"
+VENV_TARGET = BIN_DIR / ".venv"
 
-PYTHON = sys.executable  # python or pythonw
+# Default Python (will be replaced by .venv if copied)
+PYTHON = sys.executable
 system = platform.system()
 
 
@@ -32,9 +35,11 @@ def copy_files():
     BIN_DIR.mkdir(parents=True, exist_ok=True)
     shutil.copy2(MAIN_PY_SRC, MAIN_PY_TARGET)
     print(f"Copied main.py to {MAIN_PY_TARGET}")
+
     if ICON_SRC.exists():
         shutil.copy2(ICON_SRC, ICON_TARGET)
         print(f"Copied icon.png to {ICON_TARGET}")
+
     if ENV_SRC.exists():
         with open(ENV_SRC, "r") as f:
             content = f.read()
@@ -42,11 +47,29 @@ def copy_files():
         with open(ENV_TARGET, "w") as f:
             f.write(expanded)
         print(f"Copied and expanded .env to {ENV_TARGET}")
+
     if DEFAULT_YAML.exists() and not CONFIG_YAML.exists():
         shutil.copy2(DEFAULT_YAML, CONFIG_YAML)
         print(f"Copied default.yaml to {CONFIG_YAML}")
     elif CONFIG_YAML.exists():
         print(f"Config already exists at {CONFIG_YAML}, skipping copy.")
+
+    # Copy virtual environment
+    if VENV_SRC.exists():
+        if VENV_TARGET.exists():
+            print(f"Removing old .venv at {VENV_TARGET}")
+            shutil.rmtree(VENV_TARGET)
+        print(f"Copying virtual environment from {VENV_SRC} to {VENV_TARGET}...")
+        shutil.copytree(VENV_SRC, VENV_TARGET, symlinks=True)
+        print("Virtual environment copied.")
+
+
+# --- Resolve Python executable inside .venv ---
+def get_venv_python():
+    if system == "Windows":
+        return VENV_TARGET / "Scripts" / "pythonw.exe"
+    else:
+        return VENV_TARGET / "bin" / "python3"
 
 
 # --- Install startup ---
@@ -62,7 +85,7 @@ def install_windows():
         0,
         winreg.KEY_SET_VALUE,
     )
-    run_cmd = f'"{PYTHON}" "{MAIN_PY_TARGET}"'
+    run_cmd = f'"{get_venv_python()}" "{MAIN_PY_TARGET}"'
     winreg.SetValueEx(key, APP_NAME, 0, winreg.REG_SZ, run_cmd)
     winreg.CloseKey(key)
     print(f"[Windows] Installed {APP_NAME} to start at login.")
@@ -80,7 +103,7 @@ def install_macos():
     <string>com.{APP_NAME}</string>
     <key>ProgramArguments</key>
     <array>
-      <string>{PYTHON}w</string>
+      <string>{get_venv_python()}</string>
       <string>{MAIN_PY_TARGET}</string>
     </array>
     <key>RunAtLoad</key>
@@ -104,7 +127,7 @@ def install_linux():
     desktop_file = autostart_dir / f"{APP_NAME}.desktop"
     desktop_content = f"""[Desktop Entry]
 Type=Application
-Exec={PYTHON} {MAIN_PY_TARGET}
+Exec={get_venv_python()} {MAIN_PY_TARGET}
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
@@ -160,6 +183,11 @@ def uninstall_linux():
 def main():
     if len(sys.argv) < 2 or sys.argv[1] not in ["--install", "--uninstall"]:
         print("Usage: python install.py --install | --uninstall")
+        print("  --install   Install the application and set it to start at login")
+        print("  --uninstall Remove the application from startup")  
+        print("Note: This script does not remove application files.")
+        print("Source files (assume install.py is in the same folder as main.py, icon.png, default.yaml, .env, .venv)")
+        print("Make sure to run this 'uv sync' first.")
         sys.exit(1)
 
     action = sys.argv[1]
