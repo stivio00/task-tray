@@ -50,14 +50,17 @@ Where test folder is specified then it will load the config.yaml from there and 
 
 
 ## Screenshots
- Default menu:
+Default menu in mac:
 
 <img src="docs/screenshot_mac.png" alt="drawing" width="300"/>
 
-with emoticons:
+with emoticons in mac:
 
 <img src="docs/screenshot_2_mac.png" alt="drawing" width="500"/>
 
+Default view in windows:
+
+<img src="docs/screenshot_win.png" alt="drawing" width="500"/>
 
 ## Resources
 The launcher icon is provided by https://www.flaticon.com/authors/maxicons from the battlefield-2 collection in  the FlatIcons website.

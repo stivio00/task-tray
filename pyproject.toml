@@ -8,7 +8,8 @@ dependencies = [
     "pillow>=11.3.0",
     "pystray>=0.19.5",
     "pyyaml>=6.0.3",
-    "pywin32; sys_platform == 'win32'"
+    "pywin32; sys_platform == 'win32'",
+    "pyside6>=6.9.3",
 ]
 
 [dependency-groups]

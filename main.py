@@ -1,18 +1,17 @@
 import os
 import sys
 import subprocess
-import yaml
 import pathlib
-from datetime import datetime
+import yaml
 import webbrowser
+from datetime import datetime
 
-import pystray
-from pystray import MenuItem as Item, Menu
-from PIL import Image, ImageDraw
+from PySide6.QtWidgets import QApplication, QSystemTrayIcon, QMenu
+from PySide6.QtGui import QAction, QIcon
 
+# --- PATHS ---
 ICON_FILE = pathlib.Path(__file__).parent / "icon.png"
 
-# --- CONFIG DIRECTORY ---
 if len(sys.argv) > 1:
     CONFIG_DIR = pathlib.Path(sys.argv[1]).expanduser().resolve()
 else:
@@ -29,6 +28,7 @@ def log(msg: str):
         f.write(f"[{datetime.now()}] {msg}\n")
 
 
+# --- RUN COMMAND ---
 def run_command(cmd: str, type_: str = None, env: dict = None):
     log(f"Running: {cmd} (type={type_}) with env={env}")
     try:
@@ -60,16 +60,12 @@ def run_command(cmd: str, type_: str = None, env: dict = None):
                     except FileNotFoundError:
                         continue
         elif type_ == "open":
-            path = pathlib.Path(cmd).expanduser().resolve()
-            if not path.exists():
-                log(f"File does not exist: {path}")
-                return
             if sys.platform.startswith("win"):
-                subprocess.Popen(["start", path], shell=True, env=merged_env)
+                os.startfile(cmd)  # native Windows open
             elif sys.platform == "darwin":
-                subprocess.Popen(["open", path], env=merged_env)
+                subprocess.Popen(["open", cmd], env=merged_env)
             else:  # Linux
-                subprocess.Popen(["xdg-open", path], env=merged_env)
+                subprocess.Popen(["xdg-open", cmd], env=merged_env)
         elif type_ == "silent":
             subprocess.Popen(
                 cmd,
@@ -84,53 +80,38 @@ def run_command(cmd: str, type_: str = None, env: dict = None):
         log(f"Error running command: {e}")
 
 
-def build_menu(links, is_root=True):
-    items = []
-
+# --- MENU BUILDING ---
+def build_menu(links, parent_menu: QMenu, app: QApplication):
     for link in links:
         type_ = link.get("type", "silent")
         env = link.get("env", None)
 
         if type_ == "separator":
-            items.append(Menu.SEPARATOR)
+            parent_menu.addSeparator()
             continue
 
         name = link.get("name", "Unnamed")
 
         if "group" in link:
-            submenu_items = build_menu(link["group"], is_root=False)
-            items.append(Item(name, Menu(*submenu_items)))
+            submenu = QMenu(name, parent_menu)
+            build_menu(link["group"], submenu, app)
+            parent_menu.addMenu(submenu)
         else:
             cmd = link.get("cmd", "")
 
-            def make_action(c, typ, env):
-                def action(icon, item):
-                    run_command(c, typ, env)
+            action = QAction(name, parent_menu)
+            action.triggered.connect(lambda checked=False, c=cmd, t=type_, e=env: run_command(c, t, e))
+            parent_menu.addAction(action)
 
-                return action
-
-            items.append(Item(name, make_action(cmd, type_, env)))
-
-    if is_root:
-        if items and items[-1] is not Menu.SEPARATOR:
-            items.append(Menu.SEPARATOR)
-        items.append(Item("Quit", lambda icon, item: icon.stop()))
-
-    return items
+    # Add Quit only at root level
+    if parent_menu.parentWidget() is None:
+        parent_menu.addSeparator()
+        quit_action = QAction("Quit", parent_menu)
+        quit_action.triggered.connect(app.quit)
+        parent_menu.addAction(quit_action)
 
 
-def create_icon():
-    if ICON_FILE.exists():
-        return Image.open(ICON_FILE)
-    else:
-        # Fallback: simple colored circle
-        size = 64
-        img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-        draw = ImageDraw.Draw(img)
-        draw.ellipse([0, 0, size, size], fill=(255, 200, 0, 255))
-        return img
-
-
+# --- CONFIG LOADING ---
 def load_config():
     if not CONFIG_FILE.exists():
         log(f"No config.yaml found in {CONFIG_DIR}.")
@@ -139,16 +120,30 @@ def load_config():
         return yaml.safe_load(f)
 
 
+# --- MAIN APP ---
 def main():
+    app = QApplication(sys.argv)
+
     config = load_config()
     links = config.get("links", [])
 
-    icon = pystray.Icon("TaskTray")
-    icon.icon = create_icon()
-    icon.title = "Task Tray App"
-    icon.menu = Menu(*build_menu(links))
+    # Tray Icon
+    if ICON_FILE.exists():
+        icon = QIcon(str(ICON_FILE))
+    else:
+        icon = app.style().standardIcon(QSystemTrayIcon.SP_ComputerIcon)
 
-    icon.run()
+    tray = QSystemTrayIcon()
+    tray.setIcon(icon)
+    tray.setToolTip("Task Tray App")
+
+    # Build menu
+    menu = QMenu()
+    build_menu(links, menu, app)
+    tray.setContextMenu(menu)
+    tray.show()
+
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":
