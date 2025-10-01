@@ -40,7 +40,7 @@ def run_command(cmd: str, type_: str = None, env: dict = None):
             webbrowser.open(cmd)
         elif type_ == "terminal":
             if sys.platform.startswith("win"):
-                subprocess.Popen(["cmd", "/k", cmd], env=merged_env)
+                subprocess.Popen(["wt", "-w", "0", "nt", "cmd", "/k", cmd], env=merged_env)
             elif sys.platform == "darwin":
                 subprocess.Popen(
                     ["osascript", "-e", f'tell app "Terminal" to do script "{cmd}"'],
@@ -65,7 +65,7 @@ def run_command(cmd: str, type_: str = None, env: dict = None):
                 log(f"File does not exist: {path}")
                 return
             if sys.platform.startswith("win"):
-                subprocess.Popen(["start", "", path], shell=True, env=merged_env)
+                subprocess.Popen(["start", path], shell=True, env=merged_env)
             elif sys.platform == "darwin":
                 subprocess.Popen(["open", path], env=merged_env)
             else:  # Linux
@@ -75,7 +75,7 @@ def run_command(cmd: str, type_: str = None, env: dict = None):
                 cmd,
                 shell=True,
                 stdout=open(LOG_FILE, "a"),
-                stderr=subprocess.STDOUT,
+                stderr=open(LOG_FILE, "a"),
                 env=merged_env,
             )
         else:
@@ -139,7 +139,6 @@ def load_config():
         return yaml.safe_load(f)
 
 
-# --- MAIN ---
 def main():
     config = load_config()
     links = config.get("links", [])

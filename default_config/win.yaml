@@ -8,7 +8,7 @@ links:
     type: browser
 
   - name: ⚙️ Windows Settings
-    cmd: ms-settings:
+    cmd: "ms-settings:"
     type: open
 
   - type: separator

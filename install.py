@@ -13,7 +13,7 @@ SRC_DIR = pathlib.Path(__file__).parent
 MAIN_PY_SRC = SRC_DIR / "main.py"
 ICON_SRC = SRC_DIR / "icon.png"
 ENV_SRC = SRC_DIR / ".env"
-DEFAULT_YAML = SRC_DIR / "default" / "mac.yaml" # Please change this according to your OS
+DEFAULT_YAML = SRC_DIR / "default_config" / "mac.yaml" # Please change this according to your OS
 VENV_SRC = SRC_DIR / ".venv"   # source virtual environment
 
 # Target directories
