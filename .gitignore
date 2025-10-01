@@ -11,3 +11,4 @@ wheels/
 
 # macos weird files
 .DS_Store
+test/out.log

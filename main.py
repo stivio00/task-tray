@@ -31,6 +31,8 @@ def log(msg: str):
 # --- RUN COMMAND ---
 def run_command(cmd: str, type_: str = None, env: dict = None):
     log(f"Running: {cmd} (type={type_}) with env={env}")
+    path = pathlib.Path(os.path.expandvars(cmd)).expanduser()
+
     try:
         merged_env = os.environ.copy()
         if env:
@@ -61,7 +63,7 @@ def run_command(cmd: str, type_: str = None, env: dict = None):
                         continue
         elif type_ == "open":
             if sys.platform.startswith("win"):
-                os.startfile(cmd)  # native Windows open
+                os.startfile(path)  # native Windows open
             elif sys.platform == "darwin":
                 subprocess.Popen(["open", cmd], env=merged_env)
             else:  # Linux
